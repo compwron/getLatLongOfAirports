@@ -11,7 +11,7 @@ def run_command opts
   stations_file = opts[:stations_file]
   File.open(stations_file).to_a.map { |station| station.gsub!("\n", "")}
   maker = LocationSqlMaker.new(stations)
-  maker.get_sql
+  maker.make_sql
 end
 
 puts run_command(opts).join("\n")
