@@ -9,17 +9,23 @@ class LocationSqlMaker
   end
 
   def make_sql 
-  airport_codes.map { |airport_code| 
-    if File.exist?("@@output_location/#{airport_code.html}") then 
-      make_sql_from_html(airport_code)
-    else
-      get_html_for_airport_code(airport_code)
-    end
-  }
+    airport_codes.map { |airport_code| 
+      if ! File.exist?("@@output_location/#{airport_code.html}") then 
+        get_html_for_airport_code(airport_code)
+      end
+    make_sql_from_html(airport_code)
+    }
   end 
 
   def get_html_for_airport_code airport_code
-    `curl --silent http://airnav.com/airport/#{airport_code}` > "@@output_location/#{airport_code}.html"
+    output_file = "#{@@output_location}/#{airport_code}.html"
+    if File.exists?(output_file) then 
+      puts "file exists already, skipping query"
+      return 
+    end
+
+    data = `curl --silent http://airnav.com/airport/#{airport_code}` > output_file
+    File.open(output_file, 'w').write(data)
   end
 
   def make_sql_from_html airport_code
