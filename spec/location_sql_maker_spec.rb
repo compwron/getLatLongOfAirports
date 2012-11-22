@@ -19,7 +19,6 @@ describe LocationSqlMaker do
     subject = LocationSqlMaker.new(['BAF'])
 
     it "should make sql out of file" do
-      
       expected_sql = "update station set latitude=(42.157944), longitude=(-72.715861) where airport_code = 'BAF';"
       subject.make_sql_from_html('BAF').should == expected_sql
     end

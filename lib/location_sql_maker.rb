@@ -4,13 +4,13 @@ class LocationSqlMaker
 
    attr_accessor :airport_codes
 
-  def initialize stations
+  def initialize airport_codes
     @airport_codes = airport_codes
   end
 
   def make_sql 
     airport_codes.map { |airport_code| 
-      if ! File.exist?("@@output_location/#{airport_code.html}") then 
+      if ! File.exist?("@@output_location/#{airport_code}.html") then 
         get_html_for_airport_code(airport_code)
       end
     make_sql_from_html(airport_code)
@@ -20,22 +20,29 @@ class LocationSqlMaker
   def get_html_for_airport_code airport_code
     output_file = "#{@@output_location}/#{airport_code}.html"
     if File.exists?(output_file) then 
-      puts "file exists already, skipping query"
+      puts "file exists already, skipping query for #{airport_code}"
       return 
     end
 
-    data = `curl --silent http://airnav.com/airport/#{airport_code}` > output_file
-    File.open(output_file, 'w').write(data)
+    data = `curl --silent http://airnav.com/airport/#{airport_code}`
+    if ! data == "" then 
+      File.open(output_file, 'w').write(data) 
+    else
+      puts "No data found; is there an internet connection?"
+    end
   end
 
   def make_sql_from_html airport_code
-    f = File.open("#{@@output_location}/#{airport_code}.html")
-    contents = f.read
-    matcher = contents.match /.*latitude=(.*)&longitude=(.*)&name.*/
-    if (!matcher.nil? && matcher[1] && matcher[2]) then 
-      latitude = matcher[1]
-      longitude = matcher[2]
+    location = "#{@@output_location}/#{airport_code}.html"
+    if File.exists?(location) then
+      f = File.open(location)
+      contents = f.read
+      matcher = contents.match /.*latitude=(.*)&longitude=(.*)&name.*/
+      if (!matcher.nil? && matcher[1] && matcher[2]) then 
+        latitude = matcher[1]
+        longitude = matcher[2]
+        "update station set latitude=(#{latitude}), longitude=(#{longitude}) where airport_code = '#{airport_code}';"
+      end
     end
-    "update station set latitude=(#{latitude}), longitude=(#{longitude}) where airport_code = '#{airport_code}';"
   end
 end

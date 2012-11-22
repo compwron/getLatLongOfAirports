@@ -1,15 +1,15 @@
 #!/usr/bin/env ruby
 
-require_relative "../get_station_html"
+require_relative "../lib/location_sql_maker"
 require 'trollop'
 
 opts = Trollop::options do
-  opt :stations_file, "File containing stations", :default => "stations.txt"
+  opt :stations_file, "File containing stations", :default => "stations/stations.txt"
 end
 
 def run_command opts
   stations_file = opts[:stations_file]
-  File.open(stations_file).to_a.map { |station| station.gsub!("\n", "")}
+  stations = File.open(stations_file).to_a.map { |station| station.gsub!("\n", "")}
   maker = LocationSqlMaker.new(stations)
   maker.make_sql
 end

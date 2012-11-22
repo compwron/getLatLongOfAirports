@@ -5,8 +5,10 @@ Intended to generate sql for inserting latitude/longitude of airports into a tab
 
 Requires internet connection to function. 
 
+Tests require internet and filesystem access
+
 # Alternate approach idea: curl for an airport if the file does not exist. 
 # Separate command to get sql from already-curled airports. 
 # Because a single run does not get all data in a reasonable amount of time. 
 
-# Also: rewrite this in Java for reusability with the team. 
+# Rewrite this in Java for reusability with the team. 
