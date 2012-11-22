@@ -1,4 +1,4 @@
-airport_codes = File.open("all_stations.txt").to_a.map { |station| station.gsub!("\n", "")}.reverse
+airport_codes = File.open(ARGV[0]).to_a.map { |station| station.gsub!("\n", "")}.reverse
 
 airport_codes.map { |airport_code|
 	generated_sql = nil
