@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require_relative "../get_station_html"
+require 'trollop'
+
+opts = Trollop::options do
+  opt :stations_file, "File containing stations", :default => "stations.txt"
+end
+
+def run_command opts
+  stations_file = opts[:stations_file]
+  File.open(stations_file).to_a.map { |station| station.gsub!("\n", "")}
+  maker = LocationSqlMaker.new(stations)
+  maker.get_sql
+end
+
+puts run_command(opts).join("\n")
