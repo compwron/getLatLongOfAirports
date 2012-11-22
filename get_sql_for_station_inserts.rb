@@ -1,8 +1,9 @@
-airport_codes = File.open("stations.txt").to_a.map { |station| station.gsub!("\n", "")}
+airport_codes = File.open("all_stations.txt").to_a.map { |station| station.gsub!("\n", "")}.reverse
 
 airport_codes.map { |airport_code|
 	generated_sql = nil
-	html = `curl --silent http://airnav.com/airport/K#{airport_code}`
+	`sleep 1`
+	html = `curl --silent http://airnav.com/airport/#{airport_code}`
 	matcher = html.match /.*latitude=(.*)&longitude=(.*)&name.*/
 	if (!matcher.nil? && matcher[1] && matcher[2]) then 
 		latitude = matcher[1]
