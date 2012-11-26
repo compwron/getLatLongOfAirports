@@ -1,1 +1,3 @@
 all_stations.txt
+*.html
+.DS_Store

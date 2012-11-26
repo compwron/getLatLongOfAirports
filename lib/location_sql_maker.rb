@@ -12,8 +12,10 @@ class LocationSqlMaker
     airport_codes.map { |airport_code| 
       if ! File.exist?("@@output_location/#{airport_code}.html") then 
         get_html_for_airport_code(airport_code)
-      end
-    make_sql_from_html(airport_code)
+      else
+    # this is broken
+      make_sql_from_html(airport_code)
+    end
     }
   end 
 
@@ -25,10 +27,12 @@ class LocationSqlMaker
     end
 
     data = `curl --silent http://airnav.com/airport/#{airport_code}`
-    if ! data == "" then 
-      File.open(output_file, 'w').write(data) 
-    else
+    data = data.unpack("C*").pack("U*")
+
+    if data == "" then 
       puts "No data found; is there an internet connection?"
+    else 
+      File.open(output_file, 'w').write(data) 
     end
   end
 
