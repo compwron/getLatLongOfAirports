@@ -39,6 +39,12 @@ class LocationSqlMaker
     make_sql_from_html(airport_code)
   end
 
+  def make_sql_locally
+    airport_codes.map {|airport_code| 
+      make_sql_from_html airport_code
+    }
+  end
+
   def make_sql_from_html airport_code
     sql = []
     location = "#{@@output_location}/#{airport_code}.html"

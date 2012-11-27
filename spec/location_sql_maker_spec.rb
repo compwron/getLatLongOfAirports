@@ -20,7 +20,7 @@ describe LocationSqlMaker do
 
     it "should make sql out of file" do
       expected_sql = "update station set latitude=(42.157944), longitude=(-72.715861) where airport_code = 'BAF';"
-      subject.make_sql_from_html('BAF').should == expected_sql
+      subject.make_sql_from_html('BAF').should == [expected_sql]
     end
 
     it "should get html file from website" do
@@ -35,7 +35,19 @@ describe LocationSqlMaker do
 
     it "should make sql out of file" do
       expected_sql = "update station set latitude=(42.157944), longitude=(-72.715861) where airport_code = 'BAF';"
-      subject.make_sql_from_html('BAF').should == expected_sql
+      subject.make_sql_from_html('BAF').should == [expected_sql]
+    end
+  end
+
+  describe "#make_sql_locally" do
+    subject = LocationSqlMaker.new(['BAF'])
+
+    it "makes sql from any local files" do
+      expected_sql = "update station set latitude=(42.157944), longitude=(-72.715861) where airport_code = 'BAF';"
+      made_sql = subject.make_sql_locally("spec_stations.txt", "spec_output")
+      made_sql.count.should == 1
+      expected_sql = "update station set latitude=(1), longitude=(1) where airport_code = 'FOO';"
+      made_sql.first.should == expected_sql
     end
   end
 end
