@@ -39,7 +39,16 @@ class LocationSqlMaker
     make_sql_from_html(airport_code)
   end
 
-  def make_sql_locally
+  def make_sql_locally location_of_html
+    files = Dir.entries(location_of_html)
+    files.map {|filename|
+      if filename != "." && filename != ".." then
+        matcher = (filename.match /(...)\.html/)
+        if ! matcher.nil? then
+          get_sql_from_file("#{location_of_html}/#{filename}")
+        end
+      end
+    }
     airport_codes.map {|airport_code| 
       make_sql_from_html airport_code
     }
@@ -49,14 +58,20 @@ class LocationSqlMaker
     sql = []
     location = "#{@@output_location}/#{airport_code}.html"
     if File.exists?(location) then
-      f = File.open(location)
-      contents = f.read
-      matcher = contents.match /.*latitude=(.*)&longitude=(.*)&name.*/
-      if (!matcher.nil? && matcher[1] && matcher[2]) then 
-        latitude = matcher[1]
-        longitude = matcher[2]
-        sql += ["update station set latitude=(#{latitude}), longitude=(#{longitude}) where airport_code = '#{airport_code}';"]
-      end
+      sql += get_sql_from_file(location)
+    end
+    sql
+  end
+
+  def get_sql_from_file location
+    f = File.open(location)
+    airport_code = (location.match /(...)\.html/)[1]
+    contents = f.read
+    matcher = contents.match /.*latitude=(.*)&longitude=(.*)&name.*/
+    if (!matcher.nil? && matcher[1] && matcher[2]) then 
+      latitude = matcher[1]
+      longitude = matcher[2]
+      sql = ["update station set latitude=(#{latitude}), longitude=(#{longitude}) where airport_code = '#{airport_code}';"]
     end
     sql
   end
