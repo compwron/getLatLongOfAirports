@@ -9,7 +9,6 @@ class LocationSqlMaker
   end
 
   def make_sql 
-    results = []
     airport_codes.map { |airport_code| 
       file_location = "#{@@output_location}/#{airport_code}.html"
       if File.exist?(file_location) then
@@ -23,11 +22,6 @@ class LocationSqlMaker
   def get_html_for_airport_code airport_code
     output_file = "#{@@output_location}/#{airport_code}.html"
     
-    if File.exists?(output_file) then
-      make_sql_from_html(airport_code)
-      return
-    end
-
     data = `curl --silent http://airnav.com/airport/#{airport_code}`
     data = data.unpack("C*").pack("U*") # prevents utf-8 character errors
 
