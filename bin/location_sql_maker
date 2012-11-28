@@ -5,13 +5,20 @@ require 'trollop'
 
 opts = Trollop::options do
   opt :stations_file, "File containing stations", :default => "stations/stations.txt"
+  opt :local, "Use local html", :default => false
+  opt :local_location, "Where is the local html to use", :default => "output/curl"
 end
 
 def run_command opts
   stations_file = opts[:stations_file]
   stations = File.open(stations_file).to_a.map { |station| station.gsub!("\n", "")}
   maker = LocationSqlMaker.new(stations)
-  maker.make_sql
+
+  if opts[:local] == true then
+    maker.make_sql_locally opts[:local_location]
+  else
+    maker.make_sql
+  end
 end
 
 puts run_command(opts).join("\n")

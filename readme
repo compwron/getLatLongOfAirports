@@ -9,3 +9,6 @@ Tests require internet and filesystem access
 
 # Rewrite this in Java for reusability with the team. 
 
+Usage to make sql from local html (using default location for local html)
+bin/location_sql_maker -l > generated_sql.sql
+

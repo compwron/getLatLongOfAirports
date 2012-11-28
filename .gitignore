@@ -1,3 +1,4 @@
 all_stations.txt
 *.html
 .DS_Store
+generated_sql.sql

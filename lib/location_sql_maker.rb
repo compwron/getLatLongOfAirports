@@ -46,7 +46,7 @@ class LocationSqlMaker
       if filename != "." && filename != ".." then
         matcher = (filename.match /(...)\.html/)
         if ! matcher.nil? then
-          sql += get_sql_from_file("#{location_of_html}/#{filename}")
+          sql += [get_sql_from_file("#{location_of_html}/#{filename}")]
         end
       end
     }

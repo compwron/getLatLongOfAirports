@@ -46,7 +46,7 @@ describe LocationSqlMaker do
       made_sql = subject.make_sql_locally("spec/spec_output/")
       made_sql.count.should == 1
       expected_sql = "update station set latitude=(1), longitude=(1) where airport_code = 'FOO';"
-      made_sql.first.should == expected_sql
+      made_sql.first.should == [expected_sql]
     end
   end
 end

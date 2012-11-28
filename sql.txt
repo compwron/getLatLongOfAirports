@@ -1,2 +1,0 @@
-update station set latitude=(42.157944), longitude=(-72.715861) where airport_code = 'BAF';
-update station set latitude=(42.157944), longitude=(-72.715861) where airport_code = 'BAF';
