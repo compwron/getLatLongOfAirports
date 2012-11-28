@@ -28,6 +28,7 @@ class LocationSqlMaker
     if data == "" then 
       puts "No data found; is there an internet connection?"
     else 
+      puts "Got data for #{airport_code}, writing to file"
       File.open(output_file, 'w').write(data) 
     end
     make_sql_from_html(airport_code)
