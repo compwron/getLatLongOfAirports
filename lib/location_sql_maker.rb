@@ -39,17 +39,15 @@ class LocationSqlMaker
   end
 
   def make_sql_locally location_of_html
-    sql = []
     files = Dir.entries(location_of_html)
     files.map {|filename|
       if filename != "." && filename != ".." then
         matcher = (filename.match /(...)\.html/)
         if ! matcher.nil? then
-          sql += [get_sql_from_file("#{location_of_html}/#{filename}")]
+          get_sql_from_file("#{location_of_html}/#{filename}")
         end
       end
-    }
-    sql
+    }.compact
   end
 
   def get_sql_from_file location
