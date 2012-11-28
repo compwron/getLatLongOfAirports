@@ -33,6 +33,11 @@ class LocationSqlMaker
     make_sql_from_html(airport_code)
   end
 
+  def make_sql_from_html airport_code
+    location = "#{@@output_location}/#{airport_code}.html"
+    File.exists?(location) ? get_sql_from_file(location) : []
+  end
+
   def make_sql_locally location_of_html
     sql = []
     files = Dir.entries(location_of_html)
@@ -44,15 +49,6 @@ class LocationSqlMaker
         end
       end
     }
-    sql
-  end
-
-  def make_sql_from_html airport_code
-    sql = []
-    location = "#{@@output_location}/#{airport_code}.html"
-    if File.exists?(location) then
-      sql += get_sql_from_file(location)
-    end
     sql
   end
 
