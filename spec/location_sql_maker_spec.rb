@@ -3,7 +3,7 @@ require_relative "../lib/location_sql_maker.rb"
 describe LocationSqlMaker do
 
   output_location = 'output/curl'
-  test_airport_code = 'AVX'
+  test_airport_code = 'FOO'
   f = "#{output_location}/#{test_airport_code}.html"
 
   before do
@@ -11,7 +11,6 @@ describe LocationSqlMaker do
   end
 
   after do
-    f = "#{output_location}/#{test_airport_code}.html"
     if  File.exists?(f) then File.delete(f) end
   end
 
