@@ -1,5 +1,13 @@
 .DS_Store
+
+#Ruby
 output/sql/*.sql
 output/curl/*.html
 spec/spec_output/
 stations/all_stations.txt
+
+# Java
+.classpath
+.project
+.settings
+bin
