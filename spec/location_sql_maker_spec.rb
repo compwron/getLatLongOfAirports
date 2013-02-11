@@ -14,6 +14,15 @@ describe LocationSqlMaker do
     if  File.exists?(f) then File.delete(f) end
   end
 
+  describe "make_sql_from_file_contents" do
+    it "should make sql from file contents" do
+      subject = LocationSqlMaker.new([test_airport_code])
+      contents = '<A href="http://www.mapquest.com/maps/map.adp?latlongtype=decimal&zoom=6&latitude=1&longitude=1&name=FOOW" target="airport_maps">MapQuest</A>'
+      sql = subject.make_sql_from_file_contents(contents, test_airport_code)
+      sql.should == ["update station set latitude=(1), longitude=(1) where airport_code = 'FOO';"]
+    end
+  end
+
   describe "#thing" do
     subject = LocationSqlMaker.new(['BAF'])
 
@@ -24,7 +33,7 @@ describe LocationSqlMaker do
 
     it "should get html file from website" do
       File.exists?(f).should == false
-      subject.get_html_for_airport_code(test_airport_code)
+      subject.get_html_from_airnav(test_airport_code)
       File.exists?(f).should == true
     end
   end
