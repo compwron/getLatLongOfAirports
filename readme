@@ -1,4 +1,5 @@
 Usage: 
+bundle install
 ruby bin/location_sql_maker stations/all_stations.txt 
 
 Intended to generate sql for inserting latitude/longitude of airports into a table. 

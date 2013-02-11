@@ -1,4 +1,5 @@
-all_stations.txt
-*.html
 .DS_Store
-generated_sql.sql
+output/sql/*.sql
+output/curl/*.html
+spec/spec_output/
+stations/all_stations.txt
