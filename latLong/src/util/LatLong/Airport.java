@@ -1,83 +1,58 @@
 package util.LatLong;
 
-import lombok.Getter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Airport {
-	@Getter
 	Double latitude;
-	@Getter
 	Double longitude;
-	@Getter
 	String airportCode;
-	@Getter
 	String sql;
 	
     public Airport(String htmlSnippet){
-    	latitude = setLatitude(htmlSnippet);
-    	longitude = setLongitude(htmlSnippet);
-    	airportCode = setAirportCode(htmlSnippet);
+    	latitude = parseLatitude(htmlSnippet);
+    	longitude = parseLongitude(htmlSnippet);
+    	airportCode = parseAirportCode(htmlSnippet);
     	sql = generateSql(latitude, longitude, airportCode);
+    }
+
+    private Double parseLongitude(String htmlSnippet){
+    	Pattern pattern = Pattern.compile(".*latitude=.*&longitude=(.*)&.*");;
+    	Matcher matcher = pattern.matcher(htmlSnippet);
+    	return matcher.matches() ? Double.valueOf(matcher.group(1)): null;
+    }
+    
+    private Double parseLatitude(String htmlSnippet){
+    	Pattern pattern = Pattern.compile(".*latitude=(.*)&longitude.*");
+    	Matcher matcher = pattern.matcher(htmlSnippet);
+    	return matcher.matches() ? Double.valueOf(matcher.group(1)): null;
+    }
+    
+    
+    private String parseAirportCode(String htmlSnippet){
+    	Pattern pattern = Pattern.compile(".*&name=(.{3}).*");
+    	Matcher matcher = pattern.matcher(htmlSnippet);
+    	return matcher.matches() ? matcher.group(1): null;
     }
 
     private String generateSql(Double latitude2, Double longitude2,
 			String airportCode2) {
-		return null;
-	}
-
-	private String getAirportCode(String htmlSnippet) {
-		return null;
-	}
-
-	private Double getLongitude(String htmlSnippet) {
-		return null;
-	}
-
-	private Double getLatitude(String htmlSnippet) {
-		return null;
+		return "update station set latitude=("+latitude+"), longitude=("+longitude+") where airport_code = '"+airportCode+"';";
 	}
 
 	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(Double latitude) {
-		this.latitude = latitude;
-	}
-
 	public Double getLongitude() {
 		return longitude;
-	}
-
-	public void setLongitude(Double longitude) {
-		this.longitude = longitude;
 	}
 
 	public String getAirportCode() {
 		return airportCode;
 	}
-//	String s ="xyz: 123a-45";   
-//	String patternStr="xyz:[ \\t]*([\\S ]+)";
-//	Pattern p = Pattern.compile(patternStr);
-//	Matcher m = p.matcher(s);
-//	//System.err.println(s);
-//	if(m.find()){
-//	    int count = m.groupCount();
-//	    System.out.println("group count is "+count);
-//	    for(int i=0;i<count;i++){
-//	        System.out.println(m.group(i));
-//	    }
-//	}
-	public void setAirportCode(String airportCode) {
-		
-		this.airportCode = airportCode;
-	}
 
 	public String getSql() {
 		return sql;
 	}
-
-	public void setSql(String sql) {
-		this.sql = sql;
-	}
-
 }
